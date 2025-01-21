@@ -1,3 +1,5 @@
+import json
+
 import requests
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -27,8 +29,8 @@ class GoogleCalendarManager:
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', self.SCOPES)
                 creds = flow.run_local_server(port=0)
 
-            with open('token.json', 'w') as token:
-                token.write(creds.to_json())
+            """with open('token.json', 'w') as token:
+                token.write(creds.to_json())"""
 
         return build('calendar', 'v3', credentials=creds)
 
@@ -66,7 +68,7 @@ class GoogleCalendarManager:
         else:
             return False
 
-    def fetch_and_add_events(self):
+    def main(self):
         self.headers.update(self.req_1)
         r = requests.get(f"https://www.gsom.polimi.it/api/programs/courses/?programId={self.pid}", headers=self.headers)
         data = r.json().get('data', [])
@@ -103,10 +105,3 @@ class GoogleCalendarManager:
                         )
             except Exception as e:
                 continue
-
-    def main(self):
-        self.fetch_and_add_events()
-
-
-bot = GoogleCalendarManager()
-bot.main()
