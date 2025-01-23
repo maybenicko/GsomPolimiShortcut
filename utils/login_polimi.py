@@ -1,5 +1,6 @@
+import get_time
 import time
-import json
+from utils.colors import print_colored
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -8,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+from utils.get_time import get_time
 
 
 def get_cookies_raw():
@@ -15,7 +17,7 @@ def get_cookies_raw():
     password = ''
     _ = True
     while _:
-        print('[ ATTEMPTING LOGIN... ]')
+        print_colored(f'[ {get_time()} ] [ ATTEMPTING LOGIN... ]', 'yellow')
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--start-maximized")
@@ -51,7 +53,7 @@ def get_cookies_raw():
                 ec.element_to_be_clickable((By.ID, "next"))
             )
             login_button.click()
-            print('[ LOGGING IN... ]')
+            print_colored(f'[ {get_time()} ] [ LOGGING IN... ]', 'yellow')
 
             time.sleep(5)
             driver.get('https://www.gsom.polimi.it/flow/myprograms/')
@@ -63,11 +65,11 @@ def get_cookies_raw():
                 'a', {'class': 'program-item d-flex col-12 my-3 not-underlined'})['href'].split('?id=')[1]
             cookies = driver.get_cookies()
             _ = False
-            print('[ LOGGED IN! ]')
+            print_colored(f'[ {get_time()} ] [ LOGGED IN! ]', 'green')
             return cookies, program_id
         except Exception as e:
             driver.quit()
-            print(f'[ RETRYING LOGIN... ] [{e}]')
+            print_colored(f'[ {get_time()} ] [ RETRYING LOGIN... ] [{e}]', 'red')
         finally:
             driver.quit()
 

@@ -5,6 +5,8 @@ from googleapiclient.discovery import build
 from datetime import datetime
 from urllib.request import Request
 from utils.login_polimi import good_cookies
+from utils.get_time import get_time
+from utils.colors import print_colored
 
 
 class GoogleCalendarManager:
@@ -27,8 +29,8 @@ class GoogleCalendarManager:
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', self.SCOPES)
                 creds = flow.run_local_server(port=0)
 
-            with open('token.json', 'w') as token:
-                token.write(creds.to_json())
+            """with open('token.json', 'w') as token:
+                token.write(creds.to_json())"""
 
         return build('calendar', 'v3', credentials=creds)
 
@@ -56,7 +58,7 @@ class GoogleCalendarManager:
             },
         }
         event = self.service.events().insert(calendarId='primary', body=event).execute()
-        print(f"[ EVENT CREATED! ] [ {event.get('htmlLink')} ]")
+        print_colored(f"[ {get_time()} ] [ EVENT CREATED! ] [ {event.get('htmlLink')} ]", 'green')
 
     @staticmethod
     def current_date(date):
@@ -66,7 +68,7 @@ class GoogleCalendarManager:
         else:
             return False
 
-    def fetch_and_add_events(self):
+    def main(self):
         self.headers.update(self.req_1)
         r = requests.get(f"https://www.gsom.polimi.it/api/programs/courses/?programId={self.pid}", headers=self.headers)
         data = r.json().get('data', [])
@@ -85,7 +87,7 @@ class GoogleCalendarManager:
                         date = start_date.split('T')[0]
                         if not self.current_date(date):
                             continue
-                    except Exception as e:
+                    except KeyError:
                         continue
                     end_date = lesson.get('endDate')
                     name = lesson.get('name', {}).get('en')
@@ -101,12 +103,5 @@ class GoogleCalendarManager:
                             name, start_date, end_date, location, room,
                             prof_name, prof_surname, teams_url, check_in
                         )
-            except Exception as e:
+            except KeyError:
                 continue
-
-    def main(self):
-        self.fetch_and_add_events()
-
-
-bot = GoogleCalendarManager()
-bot.main()
