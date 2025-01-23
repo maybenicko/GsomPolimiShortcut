@@ -1,5 +1,3 @@
-"# GsomPolimiShortcuts" 
-"# test-" 
-"# test-" 
-"# GsomPolimiShortcuts" 
-"# GsomPolimiShortcut" 
+# GSOM Polimi Shortcuts
+
+Coming soon...

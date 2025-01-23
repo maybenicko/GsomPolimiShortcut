@@ -30,6 +30,11 @@ class UI:
 
             if not campus.isdigit():
                 print_colored('Wrong input, retry by selecting a number.', 'red')
+            print(self.campus_menu)
+            campus = input('Input your selection: ')
+
+            if not campus.isdigit():
+                print('Wrong input, retry by selecting a number.')
                 continue
 
             if int(campus) == 0:
@@ -46,6 +51,7 @@ class UI:
                 return True
 
             print_colored('Wrong input, retry by selecting a number.', 'red')
+            print('Wrong input, retry by selecting a number.')
             continue
 
     def main(self):
@@ -57,6 +63,11 @@ class UI:
 
             if not selection.isdigit():
                 print_colored('Wrong input, retry by selecting a number.', 'red')
+            print(self.main_menu)
+            selection = input('Input your selection: ')
+
+            if not selection.isdigit():
+                print('Wrong input, retry by selecting a number.')
                 continue
 
             if int(selection) == 0:
