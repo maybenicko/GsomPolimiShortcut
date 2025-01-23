@@ -1,4 +1,3 @@
-import get_time
 import time
 from utils.colors import print_colored
 from selenium import webdriver
@@ -9,12 +8,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from utils.get_time import get_time
+from utils.set_time import get_time
 
 
 def get_cookies_raw():
-    email = ''
-    password = ''
+    email = 'tronconiniccolo@gmail.com'
+    password = 'Adele1921.'
     _ = True
     while _:
         print_colored(f'[ {get_time()} ] [ ATTEMPTING LOGIN... ]', 'yellow')

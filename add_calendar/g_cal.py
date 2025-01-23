@@ -1,14 +1,13 @@
-import json
-
 import requests
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from datetime import datetime
-from urllib.request import Request
+from datetime import datetime, timedelta
+from google.auth.transport.requests import Request
 from utils.login_polimi import good_cookies
-from utils.get_time import get_time
+from utils.set_time import get_time
 from utils.colors import print_colored
+import os
 
 
 class GoogleCalendarManager:
@@ -23,22 +22,53 @@ class GoogleCalendarManager:
         self.pid = self.data[1]
 
     def authenticate_google_calendar(self):
-        creds = Credentials.from_authorized_user_file('token.json', self.SCOPES)
+        current_folder = os.path.dirname(os.path.abspath(__file__))
+        token_path = os.path.join(current_folder, "token.json")
+        creds = Credentials.from_authorized_user_file(token_path, self.SCOPES)
+
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', self.SCOPES)
+                cred_path = os.path.join(current_folder, "credentials.json")
+                flow = InstalledAppFlow.from_client_secrets_file(cred_path, self.SCOPES)
                 creds = flow.run_local_server(port=0)
 
-            """with open('token.json', 'w') as token:
-                token.write(creds.to_json())"""
-
         return build('calendar', 'v3', credentials=creds)
+
+    def check_existing_event(self, title, start, location, room):
+        start_time = datetime.fromisoformat(start[:-1])
+        time_min = start_time.isoformat() + 'Z'
+        time_max = (start_time + timedelta(hours=1)).isoformat() + 'Z'
+
+        events_result = self.service.events().list(
+            calendarId='primary',
+            timeMin=time_min,
+            timeMax=time_max,
+            q=title,
+            singleEvents=True,
+            orderBy='startTime'
+        ).execute()
+
+        events = events_result.get('items', [])
+
+        for event in events:
+            # Check if the event already exists with the same location and start time
+            if event['summary'] == title and event['location'] == f'{location} {room}':
+                return True  # Event already exists
+
+        return False  # No event found with the same title and location
 
     def add_event(self, title, start, end, location, room, prof_name, prof_sur, teams, checkin):
         if room is None:
             room = ''
+
+        # Check if the event already exists
+        if self.check_existing_event(title, start, location, room):
+            print_colored(f"[ {get_time()} ] [ SKIPPED ]", 'yellow')
+            return
+
+        # If no existing event is found, add the event
         event = {
             'summary': f"{title}",
             'location': f"{location} {room}",
@@ -59,6 +89,7 @@ class GoogleCalendarManager:
                 ],
             },
         }
+
         event = self.service.events().insert(calendarId='primary', body=event).execute()
         print_colored(f"[ {get_time()} ] [ EVENT CREATED! ] [ {event.get('htmlLink')} ]", 'green')
 
@@ -91,6 +122,9 @@ class GoogleCalendarManager:
                             continue
                     except KeyError:
                         continue
+                    except AttributeError:
+                        continue
+
                     end_date = lesson.get('endDate')
                     name = lesson.get('name', {}).get('en')
                     location = lesson.get('building', {}).get('name')
@@ -106,4 +140,6 @@ class GoogleCalendarManager:
                             prof_name, prof_surname, teams_url, check_in
                         )
             except KeyError:
+                continue
+            except AttributeError:
                 continue
