@@ -10,6 +10,8 @@ from utils.colors import print_colored
 import os
 
 
+# much more direct request
+# https://www.gsom.polimi.it/api/programs/getProgramCalenderEvents/?id=abc6fbc8-3198-ee11-be37-0022489cecab
 class GoogleCalendarManager:
     SCOPES = ['https://www.googleapis.com/auth/calendar']
 
