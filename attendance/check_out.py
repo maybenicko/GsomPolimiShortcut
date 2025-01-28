@@ -15,7 +15,7 @@ def check_out(email, psw):
     r = requests.post("https://www.gsom.polimi.it/api/programs/checkout/", headers=check_data[3], data=body)
 
     if r.status_code == 204:
-        print_colored(f'[ {get_time()} ] [ SUCCESSFULLY CHECKED-OUt ]\n', 'green')
+        print_colored(f'[ {get_time()} ] [ SUCCESSFULLY CHECKED-OUT ]\n', 'green')
     elif str(r.json()['data']['reason']) == '1':
         print_colored(f'[ {get_time()} ] [ CHECK-OUT ALREADY VALIDATED ]\n', 'green')
     elif str(r.json()['data']['reason']) == '2':
