@@ -56,7 +56,19 @@ def get_cookies_raw():
 
             time.sleep(5)
             driver.get('https://www.gsom.polimi.it/flow/myprograms/')
-            time.sleep(5)
+
+            """long = '9.1560426'
+            lat = '45.5034123'
+
+            driver.get('https://www.gsom.polimi.it/flow/attendee-checkin/?id=50d3e3bf-6535-ef11-8409-000d3aba7d08&type=LS')
+
+            driver.execute_cdp_cmd("Emulation.setGeolocationOverride", {
+                "latitude": float(lat),
+                "longitude": float(long),
+                "accuracy": 10
+            })
+
+            time.sleep(999)"""
 
             r = driver.page_source
             soup = BeautifulSoup(r, 'lxml')
@@ -97,3 +109,4 @@ def good_cookies():
     return string_cookie, program_id
 
 
+# get_cookies_raw()

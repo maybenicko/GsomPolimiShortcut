@@ -1,5 +1,8 @@
 from add_calendar.g_cal import GoogleCalendarManager
 from utils.colors import print_colored
+from attendance.get_lesson import RetrieveLesson
+from attendance.check_in import check_in
+from attendance.check_out import check_out
 
 
 class UI:
@@ -33,17 +36,17 @@ class UI:
                 continue
 
             if int(campus) == 0:
-                return False
+                return 0
 
             elif int(campus) == 1:
                 self.lat = self.navigli_lat
                 self.long = self.navigli_long
-                return True
+                return 1
 
             elif int(campus) == 2:
                 self.lat = self.bovisa_lat
                 self.long = self.bovisa_long
-                return True
+                return 2
 
             print_colored('Wrong input, retry by selecting a number.', 'red')
             continue
@@ -68,11 +71,17 @@ class UI:
                 continue
 
             elif int(selection) == 2 or int(selection) == 3:
+                x = self.campus_selection()
 
-                if not self.campus_selection():
+                if int(x) == 0:
                     run = False
                     continue
 
+                elif int(x) == 2:
+                    check_in()
+
+                elif int(x) == 3:
+                    check_out()
                 # call check in or check out
 
 
