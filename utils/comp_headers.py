@@ -2,8 +2,8 @@ import random
 from utils.login_polimi import good_cookies
 
 
-def woof():
-    data = good_cookies()
+def woof(email, psw):
+    data = good_cookies(email, psw)
     user_agent_list = [
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) '
         'Version/13.1.1 Safari/605.1.15',

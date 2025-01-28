@@ -11,12 +11,10 @@ from bs4 import BeautifulSoup
 from utils.set_time import get_time
 
 
-def get_cookies_raw():
-    email = 'tronconiniccolo@gmail.com'
-    password = 'Adele1921.'
+def get_cookies_raw(email, psw):
     _ = True
     while _:
-        print_colored(f'[ {get_time()} ] [ ATTEMPTING LOGIN... ]', 'yellow')
+        print_colored(f'\n[ {get_time()} ] [ ATTEMPTING LOGIN... ]', 'yellow')
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--start-maximized")
@@ -46,7 +44,7 @@ def get_cookies_raw():
             pass_input = WebDriverWait(driver, 10).until(
                 ec.visibility_of_element_located((By.ID, "password"))
             )
-            pass_input.send_keys(password)
+            pass_input.send_keys(psw)
 
             login_button = WebDriverWait(driver, 10).until(
                 ec.element_to_be_clickable((By.ID, "next"))
@@ -54,21 +52,14 @@ def get_cookies_raw():
             login_button.click()
             print_colored(f'[ {get_time()} ] [ LOGGING IN... ]', 'yellow')
 
-            time.sleep(5)
+            wait = WebDriverWait(driver, 10)
+            wait.until(ec.url_to_be("https://www.gsom.polimi.it/"))
+
             driver.get('https://www.gsom.polimi.it/flow/myprograms/')
 
-            """long = '9.1560426'
-            lat = '45.5034123'
-
-            driver.get('https://www.gsom.polimi.it/flow/attendee-checkin/?id=50d3e3bf-6535-ef11-8409-000d3aba7d08&type=LS')
-
-            driver.execute_cdp_cmd("Emulation.setGeolocationOverride", {
-                "latitude": float(lat),
-                "longitude": float(long),
-                "accuracy": 10
-            })
-
-            time.sleep(999)"""
+            wait.until(
+                ec.visibility_of_element_located((By.CSS_SELECTOR, "a.program-item.d-flex.col-12.my-3.not-underlined"))
+            )
 
             r = driver.page_source
             soup = BeautifulSoup(r, 'lxml')
@@ -85,8 +76,8 @@ def get_cookies_raw():
             driver.quit()
 
 
-def good_cookies():
-    data = get_cookies_raw()
+def good_cookies(email, psw):
+    data = get_cookies_raw(email, psw)
     x = data[0]
     program_id = data[1]
     cookie_names = [

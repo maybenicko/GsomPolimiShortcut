@@ -24,33 +24,6 @@ class UI:
         self.lat = ''
         self.long = ''
 
-    def campus_selection(self):
-        run = True
-        while run:
-            print_colored(self.campus_menu, 'yellow')
-            print_colored('Input your selection:', 'blue')
-            campus = input('')
-
-            if not campus.isdigit():
-                print_colored('Wrong input, retry by selecting a number.', 'red')
-                continue
-
-            if int(campus) == 0:
-                return 0
-
-            elif int(campus) == 1:
-                self.lat = self.navigli_lat
-                self.long = self.navigli_long
-                return 1
-
-            elif int(campus) == 2:
-                self.lat = self.bovisa_lat
-                self.long = self.bovisa_long
-                return 2
-
-            print_colored('Wrong input, retry by selecting a number.', 'red')
-            continue
-
     def main(self):
         run = True
         while run:
@@ -70,19 +43,22 @@ class UI:
                 GoogleCalendarManager().main()
                 continue
 
-            elif int(selection) == 2 or int(selection) == 3:
-                x = self.campus_selection()
+            if int(selection) == 2 or int(selection) == 3:
 
-                if int(x) == 0:
-                    run = False
+                print_colored('Input your email:', 'blue')
+                email = input('')
+                print_colored('Input your password:', 'blue')
+                psw = input('')
+
+                if int(selection) == 2:
+                    check_in(email, psw)
                     continue
 
-                elif int(x) == 2:
-                    check_in()
+                elif int(selection) == 3:
+                    check_out(email, psw)
+                    continue
 
-                elif int(x) == 3:
-                    check_out()
-                # call check in or check out
+            print_colored('Unidentified error', 'red')
 
 
 bot = UI()

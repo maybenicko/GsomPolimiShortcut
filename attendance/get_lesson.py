@@ -6,8 +6,8 @@ from utils.comp_headers import woof
 
 
 class RetrieveLesson:
-    def __init__(self):
-        data = woof()
+    def __init__(self, email, psw):
+        data = woof(email, psw)
         self.pid = data[1]
         self.header = data[0]
 
@@ -15,6 +15,7 @@ class RetrieveLesson:
         r = requests.get(f'https://www.gsom.polimi.it/api/programs/getProgramCalenderEvents/?id={self.pid}',
                          headers=self.header).json()
         data = r['data']
+        i = 0
 
         for item in data:
             start = item['startDate']
@@ -27,6 +28,7 @@ class RetrieveLesson:
             current_time = datetime.utcnow()
 
             if start_dt <= current_time <= end_dt:
+                i += 1
                 print_colored(f"[ {get_time()} ] [ LESSON FOUND! ]", 'yellow')
 
                 lat = item['building']['latitude']
@@ -34,3 +36,6 @@ class RetrieveLesson:
                 checkin_id = item['id']
                 return [lat, long, checkin_id, self.header]
             continue
+        if i == 0:
+            print_colored(f"[ {get_time()} ] [ NO LESSON FOUND ]\n", 'yellow')
+            return []
