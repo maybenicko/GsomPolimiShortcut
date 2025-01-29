@@ -15,9 +15,9 @@ import os
 class GoogleCalendarManager:
     SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-    def __init__(self):
+    def __init__(self, email, psw):
         self.service = self.authenticate_google_calendar()
-        self.data = good_cookies()
+        self.data = good_cookies(email, psw)
         self.req_1 = {"request-id": "|cba7485f659244828ccfb13fc36ca868.ae50475c32494a1b"}
         self.req_2 = {"request-id": "|cba7485f659244828ccfb13fc36ca868.7e2c1f517db94517"}
         self.headers = {"cookie": self.data[0]}
