@@ -4,8 +4,8 @@ from utils.set_time import get_time
 from attendance.get_lesson import RetrieveLesson
 
 
-def check_in(email, psw):
-    check_data = RetrieveLesson(email, psw).get_check_in_data()
+def check_in(pid, header):
+    check_data = RetrieveLesson(pid, header).get_check_in_data()
     if len(check_data) == 0:
         return
     print_colored(f'[ {get_time()} ] [ CHECKING IN... ]', 'yellow')

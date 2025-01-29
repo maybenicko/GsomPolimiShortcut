@@ -6,8 +6,8 @@ import json
 
 
 class SendFeedback:
-    def __init__(self, email, psw):
-        self.headers = woof(email, psw)[0]
+    def __init__(self, header):
+        self.headers = header
         self.req_list = []
 
     def get_feedbacks(self):

@@ -6,10 +6,9 @@ from utils.comp_headers import woof
 
 
 class RetrieveLesson:
-    def __init__(self, email, psw):
-        data = woof(email, psw)
-        self.pid = data[1]
-        self.header = data[0]
+    def __init__(self, pid, header):
+        self.pid = pid
+        self.header = header
 
     def get_check_in_data(self):
         r = requests.get(f'https://www.gsom.polimi.it/api/programs/getProgramCalenderEvents/?id={self.pid}',

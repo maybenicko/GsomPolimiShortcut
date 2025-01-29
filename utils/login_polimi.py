@@ -1,4 +1,3 @@
-import time
 from utils.colors import print_colored
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
