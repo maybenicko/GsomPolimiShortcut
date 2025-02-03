@@ -1,3 +1,5 @@
+import time
+
 from utils.colors import print_colored
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -51,8 +53,9 @@ def get_cookies_raw(email, psw):
             login_button.click()
             print_colored(f'[ {get_time()} ] [ LOGGING IN... ]', 'yellow')
 
-            wait = WebDriverWait(driver, 10)
-            wait.until(ec.url_to_be("https://www.gsom.polimi.it/"))
+            """wait = WebDriverWait(driver, 10)
+            wait.until(ec.url_to_be("https://www.gsom.polimi.it/flow"))"""
+            time.sleep(5)
 
             driver.get('https://www.gsom.polimi.it/flow/myprograms/')
 
@@ -67,7 +70,7 @@ def get_cookies_raw(email, psw):
             cookies = driver.get_cookies()
             _ = False
             print_colored(f'[ {get_time()} ] [ LOGGED IN! ]', 'green')
-            return cookies, program_id
+            return cookies, 'abc6fbc8-3198-ee11-be37-0022489cecab'
         except Exception as e:
             driver.quit()
             print_colored(f'[ {get_time()} ] [ RETRYING LOGIN... ] [{e}]', 'red')

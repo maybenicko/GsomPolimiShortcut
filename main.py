@@ -1,6 +1,5 @@
 from add_calendar.g_cal import GoogleCalendarManager
 from utils.colors import print_colored
-from attendance.get_lesson import RetrieveLesson
 from attendance.check_in import check_in
 from attendance.check_out import check_out
 from attendance.feedback import SendFeedback
@@ -26,7 +25,6 @@ class UI:
     def main(self):
         run = True
         while run:
-            # add header handling so that the login is not called every single time
             print_colored(self.main_menu, 'blue')
             print_colored('Input your selection:', 'blue')
             selection = input('')
