@@ -1,4 +1,10 @@
 credentials.json
 main.exe
 dist
+build
+.idea
 token.json
+add_calendar/credentials.json
+add_calendar/token.json
+venv
+main.spec
