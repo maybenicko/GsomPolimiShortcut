@@ -18,7 +18,7 @@ def get_cookies_raw(email, psw):
         print_colored(f'\n[ {get_time()} ] [ ATTEMPTING LOGIN... ]', 'yellow')
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--start-maximized")
+        chrome_options.add_argument("--disable-logging")
 
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)

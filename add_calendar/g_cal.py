@@ -29,12 +29,16 @@ class GoogleCalendarManager:
         creds = Credentials.from_authorized_user_file(token_path, self.SCOPES)
 
         if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
+            cred_path = os.path.join(current_folder, "credentials.json")
+            flow = InstalledAppFlow.from_client_secrets_file(cred_path, self.SCOPES)
+            creds = flow.run_local_server(port=0)
+
+            """if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 cred_path = os.path.join(current_folder, "credentials.json")
                 flow = InstalledAppFlow.from_client_secrets_file(cred_path, self.SCOPES)
-                creds = flow.run_local_server(port=0)
+                creds = flow.run_local_server(port=0)"""
 
         return build('calendar', 'v3', credentials=creds)
 
@@ -55,11 +59,9 @@ class GoogleCalendarManager:
         events = events_result.get('items', [])
 
         for event in events:
-            # Check if the event already exists with the same location and start time
             if event['summary'] == title and event['location'] == f'{location} {room}':
-                return True  # Event already exists
-
-        return False  # No event found with the same title and location
+                return True
+        return False
 
     def add_event(self, title, start, end, location, room, prof_name, prof_sur, teams, checkin):
         if room is None:

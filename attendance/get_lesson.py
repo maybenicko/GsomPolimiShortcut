@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils.colors import print_colored
 from utils.set_time import get_time
 from utils.comp_headers import woof
@@ -20,8 +20,8 @@ class RetrieveLesson:
             start = item['startDate']
             end = item['endDate']
             try:
-                start_dt = datetime.strptime(start, '%Y-%m-%dT%H:%M:%SZ')
-                end_dt = datetime.strptime(end, '%Y-%m-%dT%H:%M:%SZ')
+                start_dt = datetime.strptime(start, '%Y-%m-%dT%H:%M:%SZ') - timedelta(minutes=59)
+                end_dt = datetime.strptime(end, '%Y-%m-%dT%H:%M:%SZ') + timedelta(minutes=30)
             except TypeError:
                 continue
             current_time = datetime.utcnow()
