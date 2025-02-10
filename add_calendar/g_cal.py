@@ -33,13 +33,6 @@ class GoogleCalendarManager:
             flow = InstalledAppFlow.from_client_secrets_file(cred_path, self.SCOPES)
             creds = flow.run_local_server(port=0)
 
-            """if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                cred_path = os.path.join(current_folder, "credentials.json")
-                flow = InstalledAppFlow.from_client_secrets_file(cred_path, self.SCOPES)
-                creds = flow.run_local_server(port=0)"""
-
         return build('calendar', 'v3', credentials=creds)
 
     def check_existing_event(self, title, start, location, room):
